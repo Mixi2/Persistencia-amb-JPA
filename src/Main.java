@@ -22,7 +22,7 @@ public class Main extends Application {
             NOTA IMPORTANTE: Una vez ejecutado el programa por primera vez, deshabilita la opcion de reiniciar
             porque sino se eliminaran los cambios realizados 
              */
-            GestioLlistes model = new GestioLlistes(true);
+            GestioLlistes model = new GestioLlistes(false);
 
             FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("vista/app.fxml"), ResourceBundle.getBundle("strings", Locale.getDefault()));
             Controller controlador = new Controller();
