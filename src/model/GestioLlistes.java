@@ -1,5 +1,8 @@
 package model;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -71,99 +74,95 @@ public class GestioLlistes {
          
     }
 
-    private void getData() throws SQLException{
-        Statement searchdb = con.createStatement();
-        ResultSet dataStudents =  searchdb.executeQuery("SELECT * FROM Students");
-        this.RecordsList = new ArrayList<>();
-        this.StudentsList = new ArrayList<>();
-        this.SubjectsList = new ArrayList<>();
-        
-        while (dataStudents.next()){
-            StudentsList.add(
-                new Student(
-                    dataStudents.getString(1),
-                    dataStudents.getString(2),
-                    dataStudents.getString(3),
-                    dataStudents.getString(4)
-                )
-            );
+    private void getData() throws SQLException {
+        Statement searchdb = this.con.createStatement();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        this.RecordsList = new ArrayList();
+        this.StudentsList = new ArrayList();
+        this.SubjectsList = new ArrayList();
+        ResultSet dataStudents = searchdb.executeQuery("SELECT DNI FROM Students");
+
+        while(dataStudents.next()) {
+            Student student = (Student)em.find(Student.class, dataStudents.getString(1));
+            this.StudentsList.add(student);
         }
 
-        ResultSet dataRecords =  searchdb.executeQuery("SELECT * FROM Records");
+        ResultSet dataRecords = searchdb.executeQuery("SELECT DNI FROM Records");
 
-        while (dataRecords.next()) {
-            RecordsList.add(
-                new Record(
-                    dataRecords.getString(1), 
-                    dataRecords.getInt(2),
-                    dataRecords.getInt(3),
-                    dataRecords.getInt(4)
-                )
-            ); 
+        while(dataRecords.next()) {
+            Record record = (Record)em.find(Record.class, dataRecords.getString(1));
+            this.RecordsList.add(record);
         }
 
-        ResultSet dataSubjects =  searchdb.executeQuery("SELECT * FROM Subjects");
+        ResultSet dataSubjects = searchdb.executeQuery("SELECT code FROM Subjects");
 
-        while (dataSubjects.next()) {
-            SubjectsList.add(
-                new Subject(
-                    dataSubjects.getInt(1),
-                    dataSubjects.getString(2)
-                )
-            ); 
+        while(dataSubjects.next()) {
+            Subject subject = (Subject)em.find(Subject.class, dataSubjects.getInt(1));
+            this.SubjectsList.add(subject);
         }
+
+        em.close();
+        emf.close();
     }
 
-    public void createRecord(String dni, int subject_code, int ordinary_convocation_note, int extraordinary_convocation_note) throws SQLException{
-        String addRecord = "INSERT INTO Records VALUES (?,?,?,?);";
-
-        PreparedStatement createRecord1 = con.prepareStatement(addRecord);
-        createRecord1.setString(1, dni);
-        createRecord1.setInt(2, subject_code);
-        createRecord1.setInt(3, ordinary_convocation_note);
-        createRecord1.setInt(4, extraordinary_convocation_note);
-        createRecord1.executeUpdate();
-        getData();
+    public void createRecord(String dni, int subject_code, int ordinary_convocation_note, int extraordinary_convocation_note) throws SQLException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Record record = new Record(dni, subject_code, ordinary_convocation_note, extraordinary_convocation_note);
+        em.persist(record);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        this.getData();
     }
 
-    public void createStudent(String dni, String name, String address, String phone) throws SQLException{
-        String addRegion = "INSERT INTO Students VALUES (?,?,?,?);";
-        
-        PreparedStatement createStudent1 = con.prepareStatement(addRegion);
-        createStudent1.setString(1, dni);
-        createStudent1.setString(2, name);
-        createStudent1.setString(3, address);
-        createStudent1.setString(4, phone);
-        createStudent1.executeUpdate();
-        getData();
+    public void createStudent(String dni, String name, String address, String phone) throws SQLException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Student student = new Student(dni, name, address, phone);
+        em.persist(student);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        this.getData();
     }
 
-    public void removeStudent(String dni) throws SQLException{
-        String removeStudent = "DELETE FROM Students WHERE (dni = ?);";
-
-        PreparedStatement removeStudent1 = con.prepareStatement(removeStudent);
-        removeStudent1.setString(1, dni);
-        removeStudent1.executeUpdate();
-        getData();
+    public void removeStudent(String dni) throws SQLException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Student student = (Student)em.find(Student.class, dni);
+        em.getTransaction().begin();
+        em.remove(student);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        this.getData();
     }
 
-    public void addSubject(int code, String name) throws SQLException{
-        String addSubject = "INSERT INTO Subjects VALUES (?,?)";
-
-        PreparedStatement addSubject1 = con.prepareStatement(addSubject);
-        addSubject1.setInt(1, code);
-        addSubject1.setString(2, name);
-        addSubject1.executeUpdate();
-        getData();
+    public void addSubject(int code, String name) throws SQLException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Subject subject = new Subject(code, name);
+        em.getTransaction().begin();
+        em.persist(subject);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        this.getData();
     }
 
-    public void removeSubject(int code) throws SQLException{
-        String removeSubject = "DELETE FROM Subjects WHERE (code = ?)";
-
-        PreparedStatement removeSubject1 = con.prepareStatement(removeSubject);
-        removeSubject1.setInt(1, code);
-        removeSubject1.executeUpdate();
-        getData();
+    public void removeSubject(int code) throws SQLException {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Subject subject = (Subject)em.find(Subject.class, code);
+        em.getTransaction().begin();
+        em.remove(subject);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+        this.getData();
     }
 
     public boolean checktableStudents(){
