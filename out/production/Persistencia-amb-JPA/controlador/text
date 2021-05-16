@@ -1,0 +1,35 @@
+        String dni = textField_dni_remove_record.getText();
+        int subject_code = Integer.parseInt(textField_subject_code_remove_record.getText());
+        try {
+            model.removeRecord(dni, subject_code);
+            textField_dni_remove_record.setText("");
+            textField_subject_code_remove_record.setText("");
+            Stage stage = (Stage) btn_close.getScene().getWindow();
+            stage.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+
+
+        String dni = textField_dni_record.getText();
+        int subject_code = Integer.parseInt(textField_subject_code.getText()) ;
+        int ordinary_note = Integer.parseInt(textField_ordinary_note_record.getText());
+        int extraordinary_note = Integer.parseInt(textField_extraordinary_note_record.getText());
+
+        try {
+            model.createRecord(dni, subject_code, ordinary_note, extraordinary_note);
+            textField_dni_record.setText("");
+            textField_subject_code.setText("");
+            textField_ordinary_note_record.setText("");
+            textField_extraordinary_note_record.setText("");
+            Stage stage = (Stage) btn_close.getScene().getWindow();
+            stage.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+
+        public void injecta(GestioLlistes model){
+        this.model = model;
+    }
