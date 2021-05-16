@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="378.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controlador.Controller">
+   <children>
+      <Button layoutX="137.0" layoutY="302.0" mnemonicParsing="false" onAction="#btn_add_student" text="%add_student" />
+      <Button layoutX="124.0" layoutY="332.0" mnemonicParsing="false" onAction="#btn_remove_student" text="%remove_student" />
+      <ComboBox fx:id="comboBox_subject" layoutX="20.0" layoutY="149.0" prefHeight="24.0" prefWidth="83.0" />
+      <Label layoutX="75.0" layoutY="118.0" text="%subject" />
+      <Label layoutX="423.0" layoutY="43.0" text="%dni" />
+      <Label layoutX="423.0" layoutY="83.0" text="%name" />
+      <Label layoutX="422.0" layoutY="126.0" text="%address" />
+      <Label layoutX="421.0" layoutY="170.0" text="%phone" />
+      <Label layoutX="30.0" layoutY="25.0" text="%title">
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_dni" layoutX="607.0" layoutY="43.0" />
+      <Label fx:id="lbl_name" layoutX="607.0" layoutY="83.0" />
+      <Label fx:id="lbl_address" layoutX="607.0" layoutY="126.0" />
+      <Label fx:id="lbl_phone" layoutX="607.0" layoutY="170.0" />
+      <ListView fx:id="listView_students" layoutX="222.0" layoutY="56.0" prefHeight="200.0" prefWidth="166.0" />
+      <Label layoutX="422.0" layoutY="208.0" text="%ordinary_note" />
+      <Label layoutX="418.0" layoutY="245.0" text="%extraordinary_note" />
+      <Label fx:id="lbl_ordinary_note" layoutX="607.0" layoutY="208.0" />
+      <Label fx:id="lbl_extraordinary_note" layoutX="607.0" layoutY="245.0" />
+      <Button layoutX="68.0" layoutY="196.0" mnemonicParsing="false" onAction="#btn_search" text="%search" />
+      <Button layoutX="542.0" layoutY="320.0" mnemonicParsing="false" onAction="#btn_add_note" text="%add_note" />
+      <Button layoutX="112.0" layoutY="149.0" mnemonicParsing="false" onAction="#btn_refresh" text="%refresh" />
+      <Button layoutX="349.0" layoutY="302.0" mnemonicParsing="false" onAction="#btn_add_subject" text="%add_subject" />
+      <Button layoutX="337.0" layoutY="332.0" mnemonicParsing="false" onAction="#btn_remove_subject" text="%remove_subject" />
+      <Line endX="504.0" layoutX="243.0" layoutY="287.0" startX="-243.0" />
+   </children>
+</AnchorPane>
