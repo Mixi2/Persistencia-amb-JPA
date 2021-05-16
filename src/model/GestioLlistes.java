@@ -81,24 +81,22 @@ public class GestioLlistes {
         this.RecordsList = new ArrayList();
         this.StudentsList = new ArrayList();
         this.SubjectsList = new ArrayList();
-        ResultSet dataStudents = searchdb.executeQuery("SELECT DNI FROM Students");
 
+        ResultSet dataStudents = searchdb.executeQuery("SELECT DNI FROM Students");
         while(dataStudents.next()) {
-            Student student = (Student)em.find(Student.class, dataStudents.getString(1));
+            Student student = em.find(Student.class, dataStudents.getString(1));
             this.StudentsList.add(student);
         }
 
         ResultSet dataRecords = searchdb.executeQuery("SELECT DNI FROM Records");
-
         while(dataRecords.next()) {
-            Record record = (Record)em.find(Record.class, dataRecords.getString(1));
+            Record record = em.find(Record.class, dataRecords.getString(1));
             this.RecordsList.add(record);
         }
 
         ResultSet dataSubjects = searchdb.executeQuery("SELECT code FROM Subjects");
-
         while(dataSubjects.next()) {
-            Subject subject = (Subject)em.find(Subject.class, dataSubjects.getInt(1));
+            Subject subject = em.find(Subject.class, dataSubjects.getInt(1));
             this.SubjectsList.add(subject);
         }
 
@@ -109,59 +107,74 @@ public class GestioLlistes {
     public void createRecord(String dni, int subject_code, int ordinary_convocation_note, int extraordinary_convocation_note) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
+
         em.getTransaction().begin();
         Record record = new Record(dni, subject_code, ordinary_convocation_note, extraordinary_convocation_note);
         em.persist(record);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
+
         this.getData();
     }
 
     public void createStudent(String dni, String name, String address, String phone) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
+
         Student student = new Student(dni, name, address, phone);
         em.persist(student);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
+
         this.getData();
     }
 
     public void removeStudent(String dni) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
-        Student student = (Student)em.find(Student.class, dni);
+
+        Student student = em.find(Student.class, dni);
         em.getTransaction().begin();
         em.remove(student);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
+
         this.getData();
     }
 
     public void addSubject(int code, String name) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
+
         Subject subject = new Subject(code, name);
         em.getTransaction().begin();
         em.persist(subject);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
+
         this.getData();
     }
 
     public void removeSubject(int code) throws SQLException {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
         EntityManager em = emf.createEntityManager();
-        Subject subject = (Subject)em.find(Subject.class, code);
+
+        Subject subject = em.find(Subject.class, code);
         em.getTransaction().begin();
         em.remove(subject);
         em.getTransaction().commit();
+
         em.close();
         emf.close();
+
         this.getData();
     }
 
